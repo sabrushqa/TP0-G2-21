@@ -1,38 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jakartaee.org/jsf/html"
-      xmlns:f="http://xmlns.jakartaee.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
 <h:head>
     <title>TP0 - Chat simple</title>
     <h:outputStylesheet name="css/style.css"/>
-    <h:outputScript name="js/app.js"/>
 </h:head>
 <h:body>
     <h:form id="mainForm">
         <h3>Chat simplifié</h3>
 
-        <p:panelGrid columns="2" style="width:100%">
-            Role API:
-            <p:selectOneMenu value="#{chatBean.role}" disabled="#{chatBean.roleSelected}">
+        <h:panelGrid columns="2" style="width:100%">
+            <h:outputLabel value="Role API:" />
+            <h:selectOneMenu id="roleSelect" value="#{chatBean.role}" disabled="#{chatBean.roleSelected}">
                 <f:selectItem itemLabel="-- choisir --" itemValue="" />
                 <f:selectItem itemLabel="helpful assistant" itemValue="helpful assistant"/>
                 <f:selectItem itemLabel="traducteur français-anglais" itemValue="traducteur"/>
                 <f:selectItem itemLabel="guide touristique" itemValue="guide"/>
-            </p:selectOneMenu>
+            </h:selectOneMenu>
 
-            <p:commandButton value="Nouveau chat" action="#{chatBean.nouveauChat}" immediate="true"/>
-        </p:panelGrid>
+            <h:outputText value="" />
+            <h:commandButton value="Nouveau chat" action="#{chatBean.nouveauChat}">
+                <f:ajax render="@form" />
+            </h:commandButton>
+        </h:panelGrid>
 
-        <p:inputTextarea id="question" value="#{chatBean.question}" rows="4" cols="80"/>
-        <p:commandButton value="Envoyer" action="#{chatBean.envoyer}" update="@form"/>
+        <h:outputLabel value="Question:" for="question" />
+        <h:inputTextarea id="question"
+                         value="#{chatBean.question}"
+                         rows="4"
+                         cols="80"
+                         style="width:100%; max-width:800px;"/>
+
+        <h:commandButton value="Envoyer" action="#{chatBean.envoyer}">
+            <f:ajax execute="@form" render="reponseArea conversationArea question" />
+        </h:commandButton>
 
         <h4>Réponse</h4>
-        <p:inputTextarea value="#{chatBean.reponse}" readonly="true" rows="4" cols="80"/>
+        <h:inputTextarea id="reponseArea"
+                         value="#{chatBean.reponse}"
+                         readonly="true"
+                         rows="4"
+                         cols="80"
+                         style="width:100%; max-width:800px;"/>
 
         <h4>Conversation</h4>
-        <p:inputTextarea value="#{chatBean.conversation}" readonly="true" rows="10" cols="40"/>
+        <h:inputTextarea id="conversationArea"
+                         value="#{chatBean.conversation}"
+                         readonly="true"
+                         rows="10"
+                         cols="80"
+                         style="width:100%; max-width:800px;"/>
     </h:form>
 </h:body>
 </html>
