@@ -3,6 +3,7 @@ package ma.emsi.tp0lakehal.jsf;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.time.LocalTime;
 
 @Named("chatBean")
 @SessionScoped
@@ -22,34 +23,85 @@ public class ChatBean implements Serializable {
     }
 
     public void envoyer() {
+        // Validation du rôle
         if (role == null || role.isEmpty()) {
-            reponse = "⚠️ Choisissez d’abord un rôle avant d’envoyer un message.";
-            return;
-        }
-        if (question == null || question.isEmpty()) {
-            reponse = "⚠️ Écrivez une question avant d’envoyer.";
+            reponse = "⚠️ Choisissez d'abord un rôle avant d'envoyer un message.";
             return;
         }
 
-        // Simulation de la réponse IA
-        reponse = "Réponse automatique du rôle " + role + " : " + question.toUpperCase();
+        // Validation de la question
+        if (question == null || question.isEmpty()) {
+            reponse = "⚠️ Écrivez une question avant d'envoyer.";
+            return;
+        }
+
+        // Traitement personnalisé selon l'heure
+        LocalTime heure = LocalTime.now();
+        int heureJour = heure.getHour();
+
+        String conseil = "";
+        if (heureJour >= 6 && heureJour < 12) {
+            conseil = "☀️ Bon matin ! ";
+        } else if (heureJour >= 12 && heureJour < 18) {
+            conseil = "🌤️ Bon après-midi ! ";
+        } else if (heureJour >= 18 && heureJour < 22) {
+            conseil = "🌆 Bonsoir ! ";
+        } else {
+            conseil = "🌙 Il est tard ! ";
+        }
+
+        // Ajoute une analyse simple de la longueur
+        if (question.length() < 10) {
+            conseil += "Votre question est courte. Pourriez-vous développer ?";
+        } else if (question.length() < 50) {
+            conseil += "Question claire et concise !";
+        } else {
+            conseil += "Question détaillée, j'analyse " + question.split("\\s+").length + " mots.";
+        }
+
+        reponse = conseil;
         conversation += "Moi: " + question + "\n" + "Bot: " + reponse + "\n\n";
         question = "";
     }
 
     // Getters et setters nécessaires à JSF
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getRole() {
+        return role;
+    }
 
-    public boolean isRoleSelected() { return roleSelected; }
-    public void setRoleSelected(boolean roleSelected) { this.roleSelected = roleSelected; }
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-    public String getQuestion() { return question; }
-    public void setQuestion(String question) { this.question = question; }
+    public boolean isRoleSelected() {
+        return roleSelected;
+    }
 
-    public String getReponse() { return reponse; }
-    public void setReponse(String reponse) { this.reponse = reponse; }
+    public void setRoleSelected(boolean roleSelected) {
+        this.roleSelected = roleSelected;
+    }
 
-    public String getConversation() { return conversation; }
-    public void setConversation(String conversation) { this.conversation = conversation; }
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public String getReponse() {
+        return reponse;
+    }
+
+    public void setReponse(String reponse) {
+        this.reponse = reponse;
+    }
+
+    public String getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(String conversation) {
+        this.conversation = conversation;
+    }
 }
