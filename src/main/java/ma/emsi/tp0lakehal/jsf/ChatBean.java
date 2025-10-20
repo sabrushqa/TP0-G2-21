@@ -23,31 +23,31 @@ public class ChatBean implements Serializable {
     }
 
     public void envoyer() {
-        // Validation du rôle
+
         if (role == null || role.isEmpty()) {
             reponse = "⚠️ Choisissez d'abord un rôle avant d'envoyer un message.";
             return;
         }
 
-        // Validation de la question
+
         if (question == null || question.isEmpty()) {
             reponse = "⚠️ Écrivez une question avant d'envoyer.";
             return;
         }
 
-        // Traitement personnalisé selon l'heure
+
         LocalTime heure = LocalTime.now();
         int heureJour = heure.getHour();
 
         String conseil = "";
         if (heureJour >= 6 && heureJour < 12) {
-            conseil = "☀️ Bon matin ! ";
+            conseil = " Bon matin ! ";
         } else if (heureJour >= 12 && heureJour < 18) {
-            conseil = "🌤️ Bon après-midi ! ";
+            conseil = "Bon après-midi ! ";
         } else if (heureJour >= 18 && heureJour < 22) {
-            conseil = "🌆 Bonsoir ! ";
+            conseil = "Bonsoir ! ";
         } else {
-            conseil = "🌙 Il est tard ! ";
+            conseil = " Il est tard ! ";
         }
 
         // Ajoute une analyse simple de la longueur
@@ -64,7 +64,7 @@ public class ChatBean implements Serializable {
         question = "";
     }
 
-    // Getters et setters nécessaires à JSF
+
     public String getRole() {
         return role;
     }
