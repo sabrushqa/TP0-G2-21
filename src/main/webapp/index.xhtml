@@ -1,102 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
+      xmlns:h="http://xmlns.jakartaee.org/jsf/html"
+      xmlns:f="http://xmlns.jakartaee.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Chat avec API</title>
-    <h:outputStylesheet library="css" name="style.css"/>
-    <h:outputScript library="js" name="script.js"/>
+    <title>TP0 - Chat simple</title>
+    <h:outputStylesheet name="css/style.css"/>
+    <h:outputScript name="js/app.js"/>
 </h:head>
 <h:body>
-    <h2>Chat avec l'API</h2>
+    <h:form id="mainForm">
+        <h3>Chat simplifié</h3>
 
-    <h:form id="chatForm">
-        <h:panelGrid columns="2" styleClass="main-grid">
-            <!-- Colonne gauche : Zone de chat -->
-            <h:panelGroup styleClass="chat-zone">
-                <h:panelGrid columns="1" styleClass="form-grid">
+        <p:panelGrid columns="2" style="width:100%">
+            Role API:
+            <p:selectOneMenu value="#{chatBean.role}" disabled="#{chatBean.roleSelected}">
+                <f:selectItem itemLabel="-- choisir --" itemValue="" />
+                <f:selectItem itemLabel="helpful assistant" itemValue="helpful assistant"/>
+                <f:selectItem itemLabel="traducteur français-anglais" itemValue="traducteur"/>
+                <f:selectItem itemLabel="guide touristique" itemValue="guide"/>
+            </p:selectOneMenu>
 
-                    <!-- Liste déroulante pour le rôle -->
-                    <h:panelGroup>
-                        <h:outputLabel value="Rôle de l'API : " for="roleSelect"/>
-                        <p:selectOneMenu id="roleSelect"
-                                         value="#{chatBean.roleSysteme}"
-                                         disabled="#{chatBean.roleChoisi}">
-                            <f:selectItem itemLabel="Helpful assistant" itemValue="helpful assistant"/>
-                            <f:selectItem itemLabel="Traducteur français-anglais" itemValue="traducteur français-anglais"/>
-                            <f:selectItem itemLabel="Guide touristique" itemValue="guide touristique"/>
-                        </p:selectOneMenu>
-                    </h:panelGroup>
+            <p:commandButton value="Nouveau chat" action="#{chatBean.nouveauChat}" immediate="true"/>
+        </p:panelGrid>
 
-                    <!-- Zone de question -->
-                    <h:panelGroup>
-                        <h:outputLabel value="Question :" for="question"/>
-                        <h:panelGroup styleClass="textarea-with-button">
-                            <h:inputTextarea id="question"
-                                             value="#{chatBean.question}"
-                                             rows="5"
-                                             cols="60"
-                                             styleClass="question-area"
-                                             required="true"
-                                             requiredMessage="La question ne peut pas être vide !"/>
-                            <h:commandButton value="📋"
-                                             onclick="copyToClipboard('chatForm:question'); return false;"
-                                             styleClass="copy-btn"
-                                             title="Copier"/>
-                        </h:panelGroup>
-                        <h:message for="question" styleClass="error-message"/>
-                    </h:panelGroup>
+        <p:inputTextarea id="question" value="#{chatBean.question}" rows="4" cols="80"/>
+        <p:commandButton value="Envoyer" action="#{chatBean.envoyer}" update="@form"/>
 
-                    <!-- Zone de réponse -->
-                    <h:panelGroup>
-                        <h:outputLabel value="Réponse :" for="reponse"/>
-                        <h:panelGroup styleClass="textarea-with-button">
-                            <h:inputTextarea id="reponse"
-                                             value="#{chatBean.reponse}"
-                                             rows="5"
-                                             cols="60"
-                                             readonly="true"
-                                             styleClass="reponse-area"/>
-                            <h:commandButton value="📋"
-                                             onclick="copyToClipboard('chatForm:reponse'); return false;"
-                                             styleClass="copy-btn"
-                                             title="Copier"/>
-                        </h:panelGroup>
-                    </h:panelGroup>
+        <h4>Réponse</h4>
+        <p:inputTextarea value="#{chatBean.reponse}" readonly="true" rows="4" cols="80"/>
 
-                    <!-- Boutons d'action -->
-                    <h:panelGroup styleClass="button-group">
-                        <h:commandButton value="Envoyer"
-                                         action="#{chatBean.envoyerQuestion()}"
-                                         styleClass="btn btn-primary"/>
-                        <h:commandButton value="Effacer"
-                                         action="#{chatBean.effacer()}"
-                                         styleClass="btn btn-secondary"/>
-                        <h:commandButton value="Nouveau chat"
-                                         action="#{chatBean.nouveauChat()}"
-                                         styleClass="btn btn-danger"/>
-                    </h:panelGroup>
-                </h:panelGrid>
-            </h:panelGroup>
-
-            <!-- Colonne droite : Historique -->
-            <h:panelGroup styleClass="historique-zone">
-                <h:outputLabel value="Historique de la conversation :" for="historique"/>
-                <h:panelGroup styleClass="textarea-with-button">
-                    <h:inputTextarea id="historique"
-                                     value="#{chatBean.conversation}"
-                                     rows="25"
-                                     cols="50"
-                                     readonly="true"
-                                     styleClass="historique-area"/>
-                    <h:commandButton value="📋"
-                                     onclick="copyToClipboard('chatForm:historique'); return false;"
-                                     styleClass="copy-btn"
-                                     title="Copier"/>
-                </h:panelGroup>
-            </h:panelGroup>
-        </h:panelGrid>
+        <h4>Conversation</h4>
+        <p:inputTextarea value="#{chatBean.conversation}" readonly="true" rows="10" cols="40"/>
     </h:form>
 </h:body>
 </html>
