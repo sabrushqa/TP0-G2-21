@@ -2,7 +2,7 @@ function copyToClipboard(elementId) {
     const element = document.getElementById(elementId);
     if (element) {
         element.select();
-        element.setSelectionRange(0, 99999); 
+        element.setSelectionRange(0, 99999);
 
         try {
             document.execCommand('copy');
